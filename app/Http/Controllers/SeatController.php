@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Seat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SeatController extends Controller
 {
@@ -12,8 +13,21 @@ class SeatController extends Controller
      */
     public function index(string $id)
     {
+
+        /**
+         * $seats = DB::table('seats')
+         * ->join('cinemas', 'cinemas.id', '=', 'seats.cinema_id')
+         * ->select('seats.*', 'cinemas.name as cinema_name')
+         * ->where('seats.cinema_id', $id)
+         * ->get();
+         */
+
+        $seats = Seat::with('cinema')->where('cinema_id', $id)->get();
+        //dd($seats);
+
+
         return view('admin.seat.index')
-            ->with('seats', Seat::where('cinema_id', $id)->get())
+            ->with('seats', $seats)
             ->with('cinema_id', $id);
     }
 
@@ -46,9 +60,37 @@ class SeatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Seat $seat)
+    public function add(Request $request, string $cinema_id)
     {
-        //
+        if (isset($request->A)) {
+            $letters = range('A', $request->order);//B
+            foreach ($letters as $letter) {
+                //A,B
+                // $request->$letter A=8
+                for ($i = 1; $i <= $request->$letter; $i++) {
+                    Seat::upsert(
+                        [
+                            'cinema_id' => $cinema_id,
+                            'name' => $letter . $i,
+                        ],
+                        ['cinema_id'], ['name']
+                    );
+                }
+            }
+            return view('admin.seat.index')
+                ->with('seats', Seat::where('cinema_id', $cinema_id)->get())
+                ->with('cinema_id', $cinema_id);
+        }
+
+
+        if (isset($request->order)) {
+            return view('admin.seat.add')
+                ->with('cinema_id', $cinema_id)
+                ->with('order', $request->order);
+        }
+
+        return view('admin.seat.add')
+            ->with('cinema_id', $cinema_id);
     }
 
     /**

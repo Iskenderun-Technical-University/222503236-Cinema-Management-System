@@ -46,9 +46,10 @@
                                 </thead>
                                 <tbody>
                                 @foreach($seats as $seat)
+
                                     <tr>
                                         <td> {{$loop->iteration}}</td>
-                                        <td> {{$seat->cinema_id}}</td>
+                                        <td> {{$seat->cinema->name}}</td>
                                         <td> {{$seat->name}}</td>
 
                                         <td>

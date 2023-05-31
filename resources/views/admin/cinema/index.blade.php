@@ -55,6 +55,7 @@
                                             <div class=" justify-content-center d-flex ">
                                                 <a href="{{route('cinemas.edit',$cinema->id)}}" class="btn btn-warning mr-1">Edit</a>
                                                 <a href="{{route('seats.index',$cinema->id)}}" class="btn btn-success mr-1">Show Seats</a>
+                                                <a href="{{route('seats.add',$cinema->id)}}" class="btn btn-danger mr-1">Bulk Add Seats</a>
                                             </div>
                                         </td>
                                     </tr>
