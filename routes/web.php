@@ -38,11 +38,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('movies', MovieController::class)->except('show');
 
 
-    Route::get('/seats/{id}', [\App\Http\Controllers\SeatController::class, 'index'])->name('seats.index');
+    Route::get('/seats', [\App\Http\Controllers\SeatController::class, 'index'])->name('seats.index');
+    Route::get('/seats/{id}/{type}', [\App\Http\Controllers\SeatController::class, 'show'])->name('seats.show');
     Route::get('/seats/create/{id}', [\App\Http\Controllers\SeatController::class, 'create'])->name('seats.create');
     Route::post('/seats/store', [\App\Http\Controllers\SeatController::class, 'store'])->name('seats.store');
-    Route::post('/seats/edit/{id}', [\App\Http\Controllers\SeatController::class, 'edit'])->name('seats.edit');
     Route::any('/seats/add/{id}', [\App\Http\Controllers\SeatController::class, 'add'])->name('seats.add');
+    Route::delete('/seats/destroy/{id}', [\App\Http\Controllers\SeatController::class, 'destroy'])->name('seats.destroy');
 
 
 });

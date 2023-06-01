@@ -8,11 +8,16 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    Seat List
+                    @if(isset($cinema_id))
+                        Seat List for {{\App\Models\Cinema::findOrFail($cinema_id)->name}}
+                    @else
+                        Seat List for All Cinema Salons
+                    @endif
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('cinemas.index')}}">Cinema List</a></li>
                         <li class="breadcrumb-item active">Seat List</li>
                     </ol>
                 </div>
@@ -29,7 +34,9 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Seat List</h3>
-                            <a href="{{route('seats.create',$cinema_id)}}" class="btn btn-success float-right"> + Yeni Seat Ekle</a>
+                            @if(isset($cinema_id))
+                                <a href="{{route('seats.create',$cinema_id)}}" class="btn btn-success float-right"> + Yeni Seat Ekle</a>
+                            @endif
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -51,10 +58,13 @@
                                         <td> {{$loop->iteration}}</td>
                                         <td> {{$seat->cinema->name}}</td>
                                         <td> {{$seat->name}}</td>
-
                                         <td>
                                             <div class=" justify-content-center d-flex ">
-                                                <a href="{{route('seats.edit',$seat->id)}}" class="btn btn-warning mr-1">Edit</a>
+                                                <form action="{{route('seats.destroy',$seat->id)}}" method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

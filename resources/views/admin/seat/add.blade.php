@@ -38,6 +38,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title"> Bulk Add Seats </h3>
+                            <a href="{{route('cinemas.index')}}" class="btn btn-danger float-right"> Cancel!</a>
                         </div>
                         <!-- /.card-header -->
 
@@ -49,7 +50,7 @@
                                 <div class="container">
                                     <div class="form-group">
                                         <label for="title">Kacinci siraya kadar olsun </label>
-                                        <select name="order" class="form-control">
+                                        <select name="order" class="form-control" @if(isset($order) ) disabled @endif>
                                             @php
                                                 $letters=range('A','Z');
                                             @endphp
@@ -65,7 +66,7 @@
                                     </div>
 
                                     @if(isset($order))
-
+                                        <input type="hidden" value="{{$order}}">
                                         @php
                                             $letters=range('A',$order);
                                         @endphp
