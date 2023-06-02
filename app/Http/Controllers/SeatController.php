@@ -38,7 +38,7 @@ class SeatController extends Controller
             ->where('cinema_id', $id)
             ->orderBy('name', 'asc')
             ->get();
-        //dd($seats);
+
 
         if ($type == 'list') {
             return view('admin.seat.index')
@@ -49,8 +49,9 @@ class SeatController extends Controller
             $first_char = null;
             $temp = array();
             foreach ($seats as $seat) {
-                if ($first_char == substr($seat->name, 0, 1)) {
-                    $temp[$first_char][] = substr($seat->name, 1, 1);
+
+                if ($first_char == substr($seat->name, 0, 1)) {//B
+                    $temp[$first_char][] = substr($seat->name, 1, strlen($seat->name)-1);//11
                     // $temp[A]
                     // $temp[A][]=1,A[]=2,A[]=3,
                     // $temp[A]=>[1,2,3,4],$temp[A]=>[1,2,3,4]
@@ -59,6 +60,12 @@ class SeatController extends Controller
                     $temp[$first_char][] = substr($seat->name, 1, 1);
                 }
             }
+            // bu array_walk ile string value lere sahip olan multidimensional bir diziyi siraladik
+            array_walk($temp, function (&$v) {
+                sort($v);
+            });
+            //$temp[A=>[1,2,3],B=>[1,2,3]]
+
             $seats = collect($temp);
             return view('admin.seat.scene')
                 ->with('seats', $seats)
