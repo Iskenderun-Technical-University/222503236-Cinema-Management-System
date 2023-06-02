@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seat;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use phpDocumentor\Reflection\Types\Collection;
@@ -15,7 +19,6 @@ class SeatController extends Controller
     public function index()
     {
         $seats = Seat::with('cinema')->get();
-        //dd($seats);
         return view('admin.seat.index')
             ->with('seats', $seats);
     }
@@ -25,8 +28,6 @@ class SeatController extends Controller
      */
     public function show(string $id, string $type)
     {
-
-
         /**
          * $seats = DB::table('seats')
          * ->join('cinemas', 'cinemas.id', '=', 'seats.cinema_id')
@@ -51,7 +52,7 @@ class SeatController extends Controller
             foreach ($seats as $seat) {
 
                 if ($first_char == substr($seat->name, 0, 1)) {//B
-                    $temp[$first_char][] = substr($seat->name, 1, strlen($seat->name)-1);//11
+                    $temp[$first_char][] = substr($seat->name, 1, strlen($seat->name) - 1);//11
                     // $temp[A]
                     // $temp[A][]=1,A[]=2,A[]=3,
                     // $temp[A]=>[1,2,3,4],$temp[A]=>[1,2,3,4]
@@ -102,8 +103,7 @@ class SeatController extends Controller
     /**
      * Display the specified resource.
      */
-    public
-    function add(Request $request, string $cinema_id)
+    public function add(Request $request, string $cinema_id)
     {
         if (isset($request->A)) {
             $letters = range('A', $request->order);//B
@@ -119,7 +119,7 @@ class SeatController extends Controller
                     );
                 }
             }
-            return redirect()->route('seats.show', $cinema_id);
+            return redirect()->route('seats.show', [$cinema_id,'list']);
 
             //return redirect('/seats/' . $cinema_id);  // burda url tabanli yonlendirme yapiliyor
             // ve tam olarak hangi rotaya gittigi anlasilamiyor

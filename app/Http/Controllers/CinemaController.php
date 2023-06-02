@@ -21,7 +21,11 @@ class CinemaController extends Controller
             'details' => 'Listing All cinema Salon',
             'ip_address' => $request->ip(),
         ]);
-        return view('admin.cinema.index')->with('cinemas', Cinema::all());
+
+        //$cinemas = Cinema::with('seats')->get(); // bu bana seats altinda seats tablosundaki fieldlara ulasmami saglar
+        $cinemas = Cinema::withCount('seats')->get();//seats_count diye otomatik bir alan olusturdu
+
+        return view('admin.cinema.index')->with('cinemas', $cinemas);
 
     }
 
@@ -40,7 +44,6 @@ class CinemaController extends Controller
     {
         $request->validate([
             'name' => ['required', 'unique:' . Cinema::class, 'string', 'max:255'],
-            'total_seat' => ['required', 'string', 'max:255'],
 
         ]);
         $data = $request->except("_token");
@@ -54,7 +57,7 @@ class CinemaController extends Controller
             'ip_address' => $request->ip(),
         ]);
 
-        return view('admin.cinema.index')->with('cinemas', Cinema::all());
+        return redirect()->route('cinemas.index');
     }
 
 
@@ -74,7 +77,6 @@ class CinemaController extends Controller
     {
         $request->validate([
             'name' => ['required', 'unique:' . Cinema::class, 'string', 'max:255'],
-            'total_seat' => ['required', 'string', 'max:255'],
 
         ]);
         $data = $request->except("_token", "_method");
@@ -86,7 +88,7 @@ class CinemaController extends Controller
             'details' => 'Updated the cinema Salon with :' . $request->name,
             'ip_address' => $request->ip(),
         ]);
-        return view('admin.cinema.index')->with('cinemas', Cinema::all());
+        return redirect()->route('cinemas.index');
     }
 
     /**

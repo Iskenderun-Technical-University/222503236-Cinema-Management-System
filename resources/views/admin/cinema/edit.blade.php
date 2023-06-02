@@ -45,15 +45,6 @@
                                         <div class="alert alert-danger"> {{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="form-group">
-                                        <label for="total_seat">Total Seat</label>
-                                        <input type="text" class="form-control @error('total_seat') is-invalid @enderror" value="{{old('total_seat',$cinema)}}"
-                                               id="total_seat"
-                                               placeholder="Enter Total Seat" name="total_seat">
-                                        @error('total_seat')
-                                        <div class="alert alert-danger"> {{ $message }}</div>
-                                        @enderror
-                                    </div>
 
                                 </div>
                             </div>

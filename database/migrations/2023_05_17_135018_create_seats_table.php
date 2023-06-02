@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cinema_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('name');
+            $table->string('name');//A1,A2,A3,A4,A11,A12
             $table->timestamps();
         });
     }

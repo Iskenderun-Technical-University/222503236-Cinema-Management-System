@@ -49,8 +49,7 @@
                                     <tr>
                                         <td> {{$loop->iteration}}</td>
                                         <td> {{$cinema->name}}</td>
-                                        <td> {{$cinema->total_seat}}  </td>
-
+                                        <td> {{$cinema->seats_count}}  </td>
                                         <td>
                                             <div class=" justify-content-center d-flex ">
                                                 <a href="{{route('cinemas.edit',$cinema->id)}}" class="btn btn-warning mr-1">Edit</a>

@@ -66,7 +66,7 @@
                                     </div>
 
                                     @if(isset($order))
-                                        <input type="hidden" value="{{$order}}">
+                                        <input type="hidden" name="order" value="{{$order}}">
                                         @php
                                             $letters=range('A',$order);
                                         @endphp

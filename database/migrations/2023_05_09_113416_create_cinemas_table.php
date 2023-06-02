@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('cinemas', function (Blueprint $table) {
             $table->id();
             $table->string('name',50)->unique();// cocuk salon salon
-            $table->smallInteger('total_seat');//toplam koltuk sayisi
             $table->timestamps();
         });
     }

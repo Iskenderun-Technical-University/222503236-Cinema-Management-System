@@ -3,6 +3,7 @@
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,13 +37,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class)->except('edit');
     Route::resource('cinemas', CinemaController::class)->except('show');
     Route::resource('movies', MovieController::class)->except('show');
+    Route::resource('sessions', SessionController::class);
 
 
+    Route::any('/seats/add/{id}', [\App\Http\Controllers\SeatController::class, 'add'])->name('seats.add');
     Route::get('/seats', [\App\Http\Controllers\SeatController::class, 'index'])->name('seats.index');
     Route::get('/seats/{id}/{type}', [\App\Http\Controllers\SeatController::class, 'show'])->name('seats.show');
     Route::get('/seats/create/{id}', [\App\Http\Controllers\SeatController::class, 'create'])->name('seats.create');
     Route::post('/seats/store', [\App\Http\Controllers\SeatController::class, 'store'])->name('seats.store');
-    Route::any('/seats/add/{id}', [\App\Http\Controllers\SeatController::class, 'add'])->name('seats.add');
     Route::delete('/seats/destroy/{id}', [\App\Http\Controllers\SeatController::class, 'destroy'])->name('seats.destroy');
 
 
