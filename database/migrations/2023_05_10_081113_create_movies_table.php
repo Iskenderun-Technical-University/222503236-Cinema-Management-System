@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('genre');
             $table->string('director');
             $table->text('description');
-            $table->time('runtime');
+            $table->smallInteger('runtime');
             $table->date('release_date');
             $table->string('poster_url');
             $table->timestamps();

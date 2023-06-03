@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Seat;
 use App\Models\Session;
+use App\Models\SessionSeat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -13,8 +15,12 @@ class SessionController extends Controller
      */
     public function index()
     {
-        $sessions = Session::with(['cinema', 'movie'])->get();
 
+        $sessions = Session::with(['cinema', 'movie', 'session_seat'])
+            ->orderBy('date', 'desc')
+            ->orderBy('time', 'desc')
+            ->get();
+        //dd($sessions);
         return view('admin.session.index')
             ->with('sessions', $sessions);
     }
@@ -34,10 +40,19 @@ class SessionController extends Controller
     {
         $data = $request->except('_token');
 
-        Session::create($data);
+        $session = Session::create($data);
 
+        $seats = Seat::where('cinema_id', $request->cinema_id)->get();
+
+        foreach ($seats as $seat) {
+            $data2 = [
+                'session_id' => $session->id,
+                'seat_name' => $seat->name,
+                'seat_status' => 'available',
+            ];
+            SessionSeat::create($data2);
+        }
         return redirect()->route('sessions.index');
-
     }
 
     /**
@@ -51,17 +66,51 @@ class SessionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Session $session)
+    public function edit(string $id)
     {
-        //
+
+        $session = Session::where("id", $id)->firstOrFail();
+        // limit 1 olarak sql sorgu atiyor
+        return view('admin.session.create-or-edit')
+            ->with('session', $session);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Session $session)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = $request->except('_token');
+
+        $old_session = Session::findOrFail($id);
+
+       echo $old_cinema_id = $old_session->cinema_id;
+
+       echo $new_cinema_id = $request->cinema_id;
+
+        $new_session = $old_session->update($data);
+        dd($new_session);
+        die();
+        if ($request->cinema_id != $old_cinema_id) {
+
+            $old_seats = SessionSeat::where('session_id', $old_session->id);
+            $old_seats->delete();
+
+            $new_seats = Seat::where('cinema_id', $new_cinema_id)->get();
+
+            foreach ($new_seats as $seat) {
+                $data2 = [
+                    'session_id' => $new_session->id,
+                    'seat_name' => $seat->name,
+                    'seat_status' => 'available',
+                ];
+                SessionSeat::create($data2);
+            }
+        }
+
+
+        return redirect()->route('sessions.index');
     }
 
     /**

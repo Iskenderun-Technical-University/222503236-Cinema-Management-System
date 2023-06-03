@@ -94,7 +94,7 @@
 
                                     <div class="form-group">
                                         <label for="runtime">Runtime</label>
-                                        <input type="time" class="form-control @error('runtime') is-invalid @enderror"
+                                        <input type="number" class="form-control @error('runtime') is-invalid @enderror"
                                                value="@if(isset($movie)){{old('runtime',$movie)}}@else{{old('runtime')}}@endif"
                                                id="runtime"
                                                placeholder="Enter runtime" name="runtime">

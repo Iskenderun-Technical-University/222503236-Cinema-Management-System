@@ -34,13 +34,13 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-bordered ">
                                 <thead>
                                 <tr>
                                     <th>Order Number</th>
                                     <th>Cinema Salon Name</th>
                                     <th>Movie Name</th>
-                                    {{-- <th>Total/ Available Seats</th>--}}
+                                    <th>Total/ Available Seats</th>
                                     <th>is Completed</th>
                                     <th>Date</th>
                                     <th>Time</th>
@@ -50,19 +50,21 @@
                                 </thead>
                                 <tbody>
                                 @foreach($sessions as $session)
-                                    <tr>
+                                    <tr @if($session->is_completed  > $session->movie->runtime) class="text-muted table-secondary" @endif >
                                         <td> {{$loop->iteration}}</td>
                                         <td> {{$session->cinema->name}}</td>
                                         <td> {{$session->movie->title}}</td>
-                                        {{--  <td> {{$session->session_seats->total}}/{{$session->session_seats->available}}</td>--}}
+                                        <td> {{$session->total}}/{{$session->available}}</td>
                                         <td>
-                                            @if($session->is_completed)
-                                                <span class="badge badge-success"> Yes </span>
+                                            @if (  ($session->is_completed  > $session->movie->runtime ))
+                                        <span class="badge badge-secondary"> Yes </span>
+                                            @elseif ($session->is_completed <=$session->movie->runtime and $session->is_completed > 0)
+                                               <span class="badge badge-danger"> Continues </span>
                                             @else
-                                                <span class="badge badge-info"> No </span>
+                                               <span class="badge badge-info"> No </span>
                                             @endif
-
                                         </td>
+
                                         <td> {{$session->date}}</td>
                                         <td> {{$session->time}}</td>
                                         <td> {{$session->price}}</td>

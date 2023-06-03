@@ -62,17 +62,23 @@
                                 <div class="container">
                                     <div class="form-group">
                                         <label for="cinema_id">Cinema</label>
-                                        <select name="cinema_id"  class="form-control"  id="cinema_id"  >
+                                        <select name="cinema_id" class="form-control" id="cinema_id">
                                             @foreach(\App\Models\Cinema::all() as $cinema)
-                                                <option value="{{$cinema->id}}">{{$cinema->name}}</option>
-                                             @endforeach
+                                                <option
+                                                    @if($cinema->id==$session->cinema_id) selected @endif
+                                                value="{{$cinema->id}}"
+                                                >{{$cinema->name}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="movie_id">Movie</label>
-                                        <select name="movie_id"  class="form-control"  id="movie_id"  >
+                                        <select name="movie_id" class="form-control" id="movie_id">
                                             @foreach(\App\Models\Movie::all() as $movie)
-                                                <option value="{{$movie->id}}">{{$movie->title}}</option>
+                                                <option
+                                                    @if($movie->id==$session->movie_id) selected @endif
+                                                value="{{$movie->id}}"
+                                                >{{$movie->title}}</option>
                                             @endforeach
                                         </select>
                                     </div>

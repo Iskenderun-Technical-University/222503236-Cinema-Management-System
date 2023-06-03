@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use function Pest\Laravel\get;
 
 class Session extends Model
@@ -14,6 +15,14 @@ class Session extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $appends = ['is_completed', 'total', 'available'];//boyle bir sanal column olustur ve buna user orneginden ulas
+
+
+    public function session_seat(): HasMany
+    {
+        return $this->hasMany(SessionSeat::class);
+    }
 
 
     public function cinema(): BelongsTo
@@ -26,8 +35,20 @@ class Session extends Model
         return $this->belongsTo(Movie::class);
     }
 
-    protected $appends = ['is_completed'];//boyle bir sanal column olustur ve buna user orneginden ulas
-    public function getIsCompletedAttribute(): bool
+
+    public function getTotalAttribute()
+    {
+        return $this->hasMany(SessionSeat::class)->count();
+    }
+
+    public function getAvailableAttribute()
+    {
+        return $this->hasMany(SessionSeat::class)
+            ->where('seat_status', '=', 'available')
+            ->count();
+    }
+
+    public function getIsCompletedAttribute(): string
     {
         /**
          *
@@ -36,9 +57,10 @@ class Session extends Model
          * eger fark pozitf ise true donecegim
          * negatif ise false donecegim
          */
-        if (Carbon::now()->diffInMinutes(Carbon::createFromFormat('Y-m-d H:m:s', $this->date . ' ' . $this->time))) {
-            return true;
-        }
-        return false;
+
+
+        return $diff = Carbon::parse($this->date . ' ' . $this->time)->diffInMinutes(Carbon::now(), false);
+        //   dun - simdiki zaman == - deger verir
+
     }
 }
