@@ -38,6 +38,11 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'date' => 'required|date|after:' . Carbon::now()->addDay(1),
+
+        ]);
+
         $data = $request->except('_token');
 
         $session = Session::create($data);
@@ -81,27 +86,32 @@ class SessionController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        $request->validate([
+            'date' => 'required|date|after:' . Carbon::now()->addDay(1),
+
+        ]);
+
         $data = $request->except('_token');
 
         $old_session = Session::findOrFail($id);
 
-       echo $old_cinema_id = $old_session->cinema_id;
+        $old_cinema_id = $old_session->cinema_id;
 
-       echo $new_cinema_id = $request->cinema_id;
+        $new_cinema_id = $request->cinema_id;
 
-        $new_session = $old_session->update($data);
-        dd($new_session);
-        die();
+        $old_session->update($data);
+
         if ($request->cinema_id != $old_cinema_id) {
 
-            $old_seats = SessionSeat::where('session_id', $old_session->id);
+            $old_seats = SessionSeat::where('session_id', $id);
             $old_seats->delete();
 
             $new_seats = Seat::where('cinema_id', $new_cinema_id)->get();
 
             foreach ($new_seats as $seat) {
                 $data2 = [
-                    'session_id' => $new_session->id,
+                    'session_id' => $id,
                     'seat_name' => $seat->name,
                     'seat_status' => 'available',
                 ];

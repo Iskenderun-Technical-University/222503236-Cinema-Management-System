@@ -8,13 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    Session List
+                    Customer List
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{route('movies.index')}}">Movies</a></li>
-                        <li class="breadcrumb-item active">Session List</li>
+                        <li class="breadcrumb-item active">Customer List</li>
                     </ol>
                 </div>
             </div>
@@ -29,52 +28,36 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Session List</h3>
-                            <a href="{{route('sessions.create')}}" class="btn btn-success float-right"> + Yeni Oturum (Sessions) Ekle</a>
+                            <h3 class="card-title">Customer List</h3>
+                            <a href="{{route('customers.create')}}" class="btn btn-success float-right"> + Yeni Customer Ekle</a>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered ">
+                            <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>Order Number</th>
-                                    <th>Cinema Salon Name</th>
-                                    <th>Movie Name</th>
-                                    <th>Total/ Available Seats</th>
-                                    <th>is Completed</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Price</th>
+                                    <th>Name</th>
+                                    <th>Last name</th>
+                                    <th>Phone</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($sessions as $session)
-                                    <tr @if($session->is_completed  > $session->movie->runtime) class="text-muted table-secondary" @endif >
+                                @foreach($customers as $customer)
+                                    <tr>
                                         <td> {{$loop->iteration}}</td>
-                                        <td> {{$session->cinema->name}}</td>
-                                        <td> {{$session->movie->title}}</td>
-                                        <td> {{$session->total}}/{{$session->available}}</td>
+                                        <td> {{$customer->name}}</td>
+                                        <td> {{$customer->last_name}}</td>
+                                        <td> {{$customer->phone}}  </td>
+                                        <td> {{$customer->gender}}</td>
+                                        <td> {{$customer->age}}</td>
                                         <td>
-                                            @if ( ($session->is_completed  > $session->movie->runtime ))
-                                                <span class="badge badge-secondary"> Yes </span>
-                                            @elseif ($session->is_completed <=$session->movie->runtime and $session->is_completed > 0)
-                                                <span class="badge badge-danger"> Continues </span>
-                                            @else
-                                                <span class="badge badge-info"> No </span>
-                                            @endif
-                                        </td>
-
-                                        <td> {{$session->date}}</td>
-                                        <td> {{$session->time}}</td>
-                                        <td> {{$session->price}}</td>
-                                        <td>
-                                            @if ( $session->is_completed < 0 )
-                                                <div class=" justify-content-center d-flex ">
-                                                    <a href="{{route('tickets.sell',$session->id)}}" class="btn btn-success mr-1">Sell Tickets</a>
-                                                    <a href="{{route('sessions.edit',$session->id)}}" class="btn btn-warning mr-1">Edit</a>
-                                                </div>
-                                            @endif
+                                            <div class=" justify-content-center d-flex ">
+                                                <a href="{{route('customers.edit',$customer->id)}}" class="btn btn-warning mr-1">Edit</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -137,6 +137,8 @@
                                 <p>All Seats List</p>
                             </a>
                         </li>
+
+
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -153,6 +155,31 @@
                             <a href="{{ route('sessions.index') }}" class="nav-link">
                                 <i class="far fa-list nav-icon"></i>
                                 <p>All Sessions List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('sessions.create') }}" class="nav-link">
+                                <i class="far fa-plus nav-icon"></i>
+                                <p>Add New Session</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-child"></i>
+                        <p>
+                            Customer
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="{{ route('customers.index') }}" class="nav-link">
+                                <i class="far fa-list nav-icon"></i>
+                                <p>All Customer List</p>
                             </a>
                         </li>
                     </ul>

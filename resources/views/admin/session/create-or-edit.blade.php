@@ -65,9 +65,11 @@
                                         <select name="cinema_id" class="form-control" id="cinema_id">
                                             @foreach(\App\Models\Cinema::all() as $cinema)
                                                 <option
-                                                    @if($cinema->id==$session->cinema_id) selected @endif
+                                                    @if(isset($session) && $cinema->id==$session->cinema_id) selected @endif
                                                 value="{{$cinema->id}}"
-                                                >{{$cinema->name}}</option>
+                                                >
+                                                    {{$cinema->name}}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -76,7 +78,7 @@
                                         <select name="movie_id" class="form-control" id="movie_id">
                                             @foreach(\App\Models\Movie::all() as $movie)
                                                 <option
-                                                    @if($movie->id==$session->movie_id) selected @endif
+                                                    @if(isset($session) && $movie->id==$session->movie_id) selected @endif
                                                 value="{{$movie->id}}"
                                                 >{{$movie->title}}</option>
                                             @endforeach

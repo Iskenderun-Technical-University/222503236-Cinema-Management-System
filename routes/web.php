@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\CinemaController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,12 +24,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('dashboard', function () {  return view('admin.dashboard'); })->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/admin/dashboard', function () {  return view('admin.dashboard'); })->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::get('dashboard', function () {
+    return view('admin.dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->middleware(['auth', 'verified'])->name('admin.dashboard');
 
 Route::middleware('auth')->group(function () {
 
-    // burasi artik isfre ile girilmis alan
+    // burasi artik sifre ile girilmis alan
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -38,6 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('cinemas', CinemaController::class)->except('show');
     Route::resource('movies', MovieController::class)->except('show');
     Route::resource('sessions', SessionController::class);
+    Route::resource('customers', CustomerController::class);
+
+    Route::get('/tickets/{session_id}', [TicketController::class, 'sell'])->name('tickets.sell');
+    Route::get('/tickets/create/{seat_id}/{session_id}', [TicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
 
 
     Route::any('/seats/add/{id}', [\App\Http\Controllers\SeatController::class, 'add'])->name('seats.add');
