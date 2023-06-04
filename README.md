@@ -21,9 +21,9 @@ Sinema otomasyon sisteminde aşağıdaki özellikler kullanılabilmektedir.
 * Hızlı kurulum için Laravel altyapısı seçilmiştir.
 
 #### Yonetim Paneli Erişim Bilgileri
-***Kullanıcı Adı*** admin
+***Kullanıcı Adı*** admin@test.com
 
-***Kullanıcı Şifresi*** proje2023
+***Kullanıcı Şifresi*** 1
 
 
 
