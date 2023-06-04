@@ -1,7 +1,4 @@
-
-
 @extends('admin.layout.app')
-
 
 
 @section('content')
@@ -32,14 +29,14 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>150</h3>
-
-                            <p>New Orders</p>
+                            <h3>{{\App\Models\Ticket::whereDate('created_at', \Carbon\Carbon::today())->count()}}</h3>
+                            {{--https://laravel.com/docs/10.x/queries#additional-where-clauses--}}
+                            <p>New Tickets for Today</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{route('tickets.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -47,14 +44,32 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
+                            <h3>
 
-                            <p>Bounce Rate</p>
+                                @php
+
+                                    $sessions= \App\Models\Session::whereDate('created_at', \Carbon\Carbon::today())->get();
+                                    $n=0;
+                                    $seat_rate=0;
+                                     foreach ($sessions as $session) {
+                                         $n++;
+                                         $seat_rate+=$session->seat_rate;
+                                     }
+                                @endphp
+
+                                @if($n==0)
+                                    0
+                                @else
+                                    {{$seat_rate/$n}}
+                                @endif
+                                <sup style="font-size: 20px">%</sup></h3>
+
+                            <p>Occupancy Rate for Today</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{route('sessions.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -62,14 +77,14 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>44</h3>
+                            <h3>{{\App\Models\Customer::whereDate('created_at', \Carbon\Carbon::today())->count()}}</h3>
 
-                            <p>User Registrations</p>
+                            <p>Customer Registrations for Today</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{route('customers.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -77,14 +92,14 @@
                     <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>65</h3>
+                            <h3>{{\App\Models\Session::whereDate('date', \Carbon\Carbon::today())->count()}}</h3>
 
-                            <p>Unique Visitors</p>
+                            <p>Movies in Today's Show</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{route('sessions.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -357,7 +372,7 @@
                       <i class="fas fa-ellipsis-v"></i>
                     </span>
                                     <!-- checkbox -->
-                                    <div  class="icheck-primary d-inline ml-2">
+                                    <div class="icheck-primary d-inline ml-2">
                                         <input type="checkbox" value="" name="todo1" id="todoCheck1">
                                         <label for="todoCheck1"></label>
                                     </div>
@@ -376,7 +391,7 @@
                       <i class="fas fa-ellipsis-v"></i>
                       <i class="fas fa-ellipsis-v"></i>
                     </span>
-                                    <div  class="icheck-primary d-inline ml-2">
+                                    <div class="icheck-primary d-inline ml-2">
                                         <input type="checkbox" value="" name="todo2" id="todoCheck2" checked>
                                         <label for="todoCheck2"></label>
                                     </div>
@@ -392,7 +407,7 @@
                       <i class="fas fa-ellipsis-v"></i>
                       <i class="fas fa-ellipsis-v"></i>
                     </span>
-                                    <div  class="icheck-primary d-inline ml-2">
+                                    <div class="icheck-primary d-inline ml-2">
                                         <input type="checkbox" value="" name="todo3" id="todoCheck3">
                                         <label for="todoCheck3"></label>
                                     </div>
@@ -408,7 +423,7 @@
                       <i class="fas fa-ellipsis-v"></i>
                       <i class="fas fa-ellipsis-v"></i>
                     </span>
-                                    <div  class="icheck-primary d-inline ml-2">
+                                    <div class="icheck-primary d-inline ml-2">
                                         <input type="checkbox" value="" name="todo4" id="todoCheck4">
                                         <label for="todoCheck4"></label>
                                     </div>
@@ -424,7 +439,7 @@
                       <i class="fas fa-ellipsis-v"></i>
                       <i class="fas fa-ellipsis-v"></i>
                     </span>
-                                    <div  class="icheck-primary d-inline ml-2">
+                                    <div class="icheck-primary d-inline ml-2">
                                         <input type="checkbox" value="" name="todo5" id="todoCheck5">
                                         <label for="todoCheck5"></label>
                                     </div>
@@ -440,7 +455,7 @@
                       <i class="fas fa-ellipsis-v"></i>
                       <i class="fas fa-ellipsis-v"></i>
                     </span>
-                                    <div  class="icheck-primary d-inline ml-2">
+                                    <div class="icheck-primary d-inline ml-2">
                                         <input type="checkbox" value="" name="todo6" id="todoCheck6">
                                         <label for="todoCheck6"></label>
                                     </div>

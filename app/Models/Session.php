@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Trait\BaseModelTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,11 +13,11 @@ use function Pest\Laravel\get;
 
 class Session extends Model
 {
-    use HasFactory;
+    use HasFactory , BaseModelTrait;
 
     protected $guarded = [];
 
-    protected $appends = ['is_completed', 'total', 'available'];//boyle bir sanal column olustur ve buna user orneginden ulas
+    protected $appends = ['is_completed', 'total', 'available', 'seat_rate'];//boyle bir sanal column olustur ve buna user orneginden ulas
 
 
     public function session_seat(): HasMany
@@ -46,6 +47,10 @@ class Session extends Model
         return $this->hasMany(SessionSeat::class)
             ->where('seat_status', '=', 'available')
             ->count();
+    }
+    public function getSeatRateAttribute()
+    {
+        return ($this->total-$this->available)/$this->total*100;
     }
 
     public function getIsCompletedAttribute(): string

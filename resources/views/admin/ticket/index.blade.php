@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    Customer List
+                    Ticket List
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item active">Customer List</li>
+                        <li class="breadcrumb-item active">Ticket List</li>
                     </ol>
                 </div>
             </div>
@@ -28,35 +28,40 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Customer List</h3>
-                            <a href="{{route('customers.create')}}" class="btn btn-success float-right"> + Yeni Customer Ekle</a>
-                        </div>
+                            <h3 class="card-title">Ticket List</h3>
+                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>Order Number</th>
-                                    <th>Name</th>
-                                    <th>Last name</th>
-                                    <th>Phone</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
+                                    <th>Seat Name</th>
+                                    <th>Price</th>
+                                    <th>Purchase Date</th>
+                                    <th>Ticket No </th>
+                                    <th>Customer</th>
+                                    <th>Customer Phone</th>
+                                    <th>Movie</th>
+                                    <th>Salon</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($customers as $customer)
+                                @foreach($tickets as $ticket)
                                     <tr>
                                         <td> {{$loop->iteration}}</td>
-                                        <td> {{$customer->name}}</td>
-                                        <td> {{$customer->last_name}}</td>
-                                        <td> {{$customer->phone}}  </td>
-                                        <td> {{$customer->gender}}</td>
-                                        <td> {{$customer->age}}</td>
+                                        <td> {{$ticket->seat_name}}</td>
+                                        <td> {{$ticket->purchase_price}}</td>
+                                        <td> {{$ticket->purchase_date}}  </td>
+                                        <td> {{$ticket->ticket_no}}</td>
+                                        <td> {{$ticket->customer_name}}</td>
+                                        <td> {{$ticket->phone}}</td>
+                                        <td> {{$ticket->movie_name}}</td>
+                                        <td> {{$ticket->cinema_salon_name}}</td>
                                         <td>
                                             <div class=" justify-content-center d-flex ">
-                                                <a href="{{route('customers.edit',$customer->id)}}" class="btn btn-warning mr-1">Edit</a>
+                                                <a href="{{route('tickets.show',$ticket->session_seat_id)}}" class="btn btn-warning mr-1">Show</a>
                                             </div>
                                         </td>
                                     </tr>

@@ -45,12 +45,11 @@
                                         <td><span class="letter"> {{$key}}</span></td>
                                         @foreach( $seat as  $value)
                                             <td>
-
                                                     @if($value['status']=='available')
                                                       <a href="{{route('tickets.create',[$value['id'],$session_id])}}"><span> {{$value['number']}} </span></a>
                                                     @else
-                                                     <span class="not-available">{{$value['number']}}</span>
-                                                    @endif
+                                                    <a href="{{route('tickets.show',$value['id'])}}"><span  class="not-available" > {{$value['number']}} </span></a>
+                                                @endif
 
                                             </td>
                                         @endforeach

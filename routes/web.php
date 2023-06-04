@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
 
     // burasi artik sifre ile girilmis alan
 
+    Route::get('/logs', [\App\Http\Controllers\AdminsLogController::class, 'index'])->name('logs.index');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -46,7 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('sessions', SessionController::class);
     Route::resource('customers', CustomerController::class);
 
+
+    Route::get('/tickets', [\App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
     Route::get('/tickets/{session_id}', [TicketController::class, 'sell'])->name('tickets.sell');
+    Route::get('/tickets/show/{session_seat_id}', [TicketController::class, 'show'])->name('tickets.show');
     Route::get('/tickets/create/{seat_id}/{session_id}', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
 

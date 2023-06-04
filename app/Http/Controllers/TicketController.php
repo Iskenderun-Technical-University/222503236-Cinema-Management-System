@@ -9,6 +9,7 @@ use App\Models\SessionSeat;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -17,7 +18,21 @@ class TicketController extends Controller
      */
     public function index()
     {
-        //
+        $tickets = DB::table('tickets')
+            ->select('session_seats.seat_name','session_seats.id as session_seat_id','session_seats.purchase_price','session_seats.purchase_date','tickets.ticket_no',
+            DB::raw('CONCAT(customers.name, " ",customers.last_name) as customer_name') ,'customers.phone as phone'
+                ,'movies.title as movie_name','cinemas.name as cinema_salon_name')
+            ->join('session_seats', 'tickets.session_seat_id', 'session_seats.id')
+            ->join('customers', 'tickets.customer_id', 'customers.id')
+            ->join('sessions', 'session_seats.session_id', 'sessions.id')
+            ->join('movies', 'sessions.movie_id', 'movies.id')
+            ->join('cinemas', 'sessions.cinema_id', 'cinemas.id')
+            ->get();
+
+        return view('admin.ticket.index')
+            ->with('tickets', $tickets);
+
+
     }
 
     /**
@@ -35,18 +50,21 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        $customer_data = $request->except('_token', 'session_seat_id', 'session_id', 'discount');
+        $customer_data = $request->except('_token', 'session_seat_id', 'session_id', 'discount', 'phone');
+        $customer = Customer::updateOrCreate(
+            ['phone' => $request->phone],//burasi benim tablo icinde aradigim kayit
+            $customer_data
+        );
 
-        $customer = Customer::create($customer_data);
+        $ticket = Ticket::updateOrCreate(
+            ['session_seat_id' => $request->session_seat_id],//burasi benim tablo icinde aradigim kayit
+            ['customer_id' => $customer->id, 'ticket_no' => 'T' . time()]
+        );
 
-        $ticket_data = $request->only('session_seat_id');
-        $ticket_data['customer_id'] = $customer->id;
-        $ticket_data['ticket_no'] = 'T' . time();
-
-        Ticket::create($ticket_data);
+        //updateOrCreate methoduyla islem yaparken ilk array aranacak verilerin bulundugu array
+        //ikinci array ise  guncellenecek veya eklenecek verilerin bulundugu array
 
         $session = Session::findOrfail($request->session_id);
-
         SessionSeat::findOrFail($request->session_seat_id)->update(
             [
                 'seat_status' => 'full',
@@ -56,16 +74,23 @@ class TicketController extends Controller
             ]
         );
 
-        return redirect()
-            ->route('tickets.sell', $request->session_id);
+        return redirect()->route('tickets.show', $request->session_seat_id);
+        // return redirect() ->route('tickets.sell', $request->session_id);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Ticket $ticket)
+    public function show(string $session_seat_id)
     {
-        //
+
+        $info = SessionSeat::findOrFail($session_seat_id);
+        $session = Session::with('cinema', 'movie')->findOrFail($info->session_id);
+
+        // dd($session);
+        return view('admin.ticket.show')
+            ->with('info', $info)
+            ->with('session', $session);
     }
 
     public function sell(string $session_id)
@@ -99,6 +124,8 @@ class TicketController extends Controller
 
         $seats = collect($temp);
         // dd($seats);
+
+
         return view('admin.ticket.scene')
             ->with('seats', $seats)
             ->with('session_id', $session_id);

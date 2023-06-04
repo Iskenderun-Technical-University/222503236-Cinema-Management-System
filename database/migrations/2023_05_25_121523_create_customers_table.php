@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('last_name');
-            $table->string('phone');
+            $table->string('phone')->index()->unique();//primary key gibi davranir ayrica unique yapar
             $table->string('gender');
             $table->string('age');
             $table->timestamps();

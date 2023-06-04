@@ -14,17 +14,8 @@ class CinemaController extends Controller
      */
     public function index(Request $request)
     {
-
-        AdminsLog::create([
-            'user_id' => Auth::id(),// bu bana login olan kullanicinin idsini verir
-            'type' => 'All Show',
-            'details' => 'Listing All cinema Salon',
-            'ip_address' => $request->ip(),
-        ]);
-
         //$cinemas = Cinema::with('seats')->get(); // bu bana seats altinda seats tablosundaki fieldlara ulasmami saglar
         $cinemas = Cinema::withCount('seats')->get();//seats_count diye otomatik bir alan olusturdu
-
         return view('admin.cinema.index')->with('cinemas', $cinemas);
 
     }
@@ -44,19 +35,9 @@ class CinemaController extends Controller
     {
         $request->validate([
             'name' => ['required', 'unique:' . Cinema::class, 'string', 'max:255'],
-
         ]);
         $data = $request->except("_token");
-
         Cinema::create($data);
-
-        AdminsLog::create([
-            'user_id' => Auth::id(),// bu bana login olan kullanicinin idsini verir
-            'type' => 'Store ',
-            'details' => 'Stored the cinema Salon with :' . $request->name,
-            'ip_address' => $request->ip(),
-        ]);
-
         return redirect()->route('cinemas.index');
     }
 
@@ -77,17 +58,11 @@ class CinemaController extends Controller
     {
         $request->validate([
             'name' => ['required', 'unique:' . Cinema::class, 'string', 'max:255'],
-
         ]);
         $data = $request->except("_token", "_method");
 
         Cinema::findOrFail($id)->update($data);
-        AdminsLog::create([
-            'user_id' => Auth::id(),// bu bana login olan kullanicinin idsini verir
-            'type' => 'Update ',
-            'details' => 'Updated the cinema Salon with :' . $request->name,
-            'ip_address' => $request->ip(),
-        ]);
+
         return redirect()->route('cinemas.index');
     }
 

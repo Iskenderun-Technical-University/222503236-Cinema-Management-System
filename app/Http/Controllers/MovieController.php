@@ -15,12 +15,7 @@ class MovieController extends Controller
     public function index(Request $request)
     {
 
-        AdminsLog::create([
-            'user_id' => Auth::id(),// bu bana login olan kullanicinin idsini verir
-            'type' => 'All Show',
-            'details' => Auth::user()->full_isim.' listening all movie',
-            'ip_address' => $request->ip(),
-        ]);
+
         return view('admin.movie.index')->with('movies', Movie::all());
 
     }
@@ -51,12 +46,6 @@ class MovieController extends Controller
 
         Movie::create($data);
 
-        AdminsLog::create([
-            'user_id' => Auth::id(),// bu bana login olan kullanicinin idsini verir
-            'type' => 'Store ',
-            'details' => Auth::user()->full_isim.' recorded the movie named ' . $request->title,
-            'ip_address' => $request->ip(),
-        ]);
 
         return view('admin.movie.index')->with('movies', Movie::all());
     }
@@ -88,12 +77,7 @@ class MovieController extends Controller
         $data = $request->except("_token", "_method");
 
         Movie::findOrFail($id)->update($data);
-        AdminsLog::create([
-            'user_id' => Auth::id(),// bu bana login olan kullanicinin idsini verir
-            'type' => 'Update ',
-            'details' =>Auth::user()->full_isim.' updated the movie named ' . $request->title,
-            'ip_address' => $request->ip(),
-        ]);
+
         return view('admin.movie.index')->with('movies', Movie::all());
     }
 

@@ -41,6 +41,7 @@
                                     <th>Cinema Salon Name</th>
                                     <th>Movie Name</th>
                                     <th>Total/ Available Seats</th>
+                                    <th>Occupancy rate</th>
                                     <th>is Completed</th>
                                     <th>Date</th>
                                     <th>Time</th>
@@ -55,6 +56,7 @@
                                         <td> {{$session->cinema->name}}</td>
                                         <td> {{$session->movie->title}}</td>
                                         <td> {{$session->total}}/{{$session->available}}</td>
+                                        <td> {{$session->seat_rate}}</td>
                                         <td>
                                             @if ( ($session->is_completed  > $session->movie->runtime ))
                                                 <span class="badge badge-secondary"> Yes </span>

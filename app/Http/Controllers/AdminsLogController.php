@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminsLog;
 use Illuminate\Http\Request;
+use function Pest\Laravel\get;
 
 class AdminsLogController extends Controller
 {
@@ -12,7 +13,11 @@ class AdminsLogController extends Controller
      */
     public function index()
     {
-        //
+
+        $logs = AdminsLog::orderBy('id', 'desc') -> get();
+        //dd($logs);
+        return view('admin.logs.index')
+            ->with('logs', $logs);
     }
 
     /**
